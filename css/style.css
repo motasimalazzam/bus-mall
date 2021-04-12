@@ -1,0 +1,30 @@
+#all-images{
+    position: center;
+}
+#all-images #left-image{
+    height: 400px;
+    width: 400px;
+    display: inline;
+}
+#all-images #center-image{
+    height: 400px;
+    width: 400px;
+    display: inline;
+}
+#all-images #right-image{
+    height: 400px;
+    width: 400px;
+    display: inline;
+}
+h1{
+    color: red;
+    text-align: center;
+    padding-top: 50px;
+    margin-bottom: 50px;
+    font-size: xx-large;
+}
+ li {
+     text-align: center;
+    display: grid;
+    padding: 5px;
+}
