@@ -13,6 +13,11 @@ let userAttempt = 0;
 let leftIndex;
 let centerIndex;
 let rightIndex;
+let checkIndex=[];
+
+let namesArray=[];
+let votesArray=[];
+let viewsArray=[];
 
 function Product(name, source) {
     this.name = name;
@@ -20,6 +25,7 @@ function Product(name, source) {
     this.votes = 0;
     this.views = 0;
     Product.allProducts.push(this);
+    namesArray.push(this.name);
 }
 Product.allProducts = [];
 console.log('products array', Product.allProducts = []);
@@ -59,13 +65,15 @@ function renderThreeImages() {
     leftIndex = getRandomIndex();
     centerIndex = getRandomIndex();
     rightIndex = getRandomIndex();
-    while (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex) {
+    while (leftIndex === centerIndex || leftIndex === rightIndex || centerIndex === rightIndex || checkIndex.includes(leftIndex) || checkIndex.includes(centerIndex) || checkIndex.includes(rightIndex)) {
         centerIndex = getRandomIndex();
         rightIndex = getRandomIndex();
-        while (centerIndex === rightIndex) {
-            rightIndex = getRandomIndex();
-        }
+       leftIndex=getRandomIndex();
     }
+    
+    checkIndex = [];
+    checkIndex.push(leftIndex, centerIndex, rightIndex);
+
     leftImage.src = Product.allProducts[leftIndex].source;
     centerImage.src = Product.allProducts[centerIndex].source;
     rightImage.src = Product.allProducts[rightIndex].source;
@@ -91,11 +99,17 @@ function handelClick(event) {
             Product.allProducts[centerIndex].votes++;
         } else if (event.target.id === 'right-image') {
             Product.allProducts[rightIndex].votes++;
+        }else{
+            alert('please click on photo');
+            userAttempt--;
         }
 
     } else {
         allImages.removeEventListener('click', handelClick);
         button.addEventListener('click', allResult);
+        button.hidden=false;
+        let charts=document.getElementById('myChart');
+        // button.appendChild(charts);
         let list = document.createElement('ul');
         result.appendChild(list);
 
@@ -107,10 +121,16 @@ function handelClick(event) {
                 console.log('result', resultList);
                 if (userAttempt=maxAttempt){
                 button.removeEventListener('click', allResult);
+                
                 }
             }
-
+            chart();
         }
+        for (let i = 0; i < Product.allProducts.length; i++) {
+            votesArray.push( Product.allProducts[i].votes);
+            viewsArray.push( Product.allProducts[i].views);
+        }
+        
 
     }
 
@@ -123,3 +143,44 @@ console.log(Product.allProducts);
 
 renderThreeImages();
 
+//chatr
+
+function chart() {
+    let ctx = document.getElementById('myChart').getContext('2d');
+    
+    let chart= new Chart(ctx,{
+      // what type is the chart
+     type: 'bar',
+  
+    //  the data for showing
+     data:{
+      //  for the names
+        labels: namesArray,
+        
+        datasets: [
+          {
+          label: 'Priduct votes',
+          data: votesArray,
+          backgroundColor: [
+            'rgb(251, 93, 76)',
+          ],
+    
+          borderWidth: 1
+        },
+  
+        {
+          label: 'Product shown',
+          data: viewsArray,
+          backgroundColor: [
+            'black',
+          ],
+    
+          borderWidth: 1
+        }
+        
+      ]
+      },
+      options: {}
+    });
+    
+  }
