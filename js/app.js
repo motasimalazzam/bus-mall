@@ -121,7 +121,6 @@ function handelClick(event) {
                 console.log('result', resultList);
                 if (userAttempt=maxAttempt){
                 button.removeEventListener('click', allResult);
-                
                 }
             }
             chart();
@@ -130,18 +129,32 @@ function handelClick(event) {
             votesArray.push( Product.allProducts[i].votes);
             viewsArray.push( Product.allProducts[i].views);
         }
-        
+        updateStorage();
 
     }
-
-
-
     console.log(Product.allProducts);
     renderThreeImages();
 }
-console.log(Product.allProducts);
 
-renderThreeImages();
+// function for update data
+
+function updateStorage(){
+    let arrayString=JSON.stringify(Product.allProducts);
+    localStorage.setItem('product',arrayString);
+}
+
+// get the data from the local storage
+
+function getProductsdata(){
+    let data=localStorage.getItem('product');
+    let productData=JSON.parse(data);
+    if(productData!==null){
+        Product.allProducts=productData;
+    }
+    renderThreeImages();
+}
+
+// console.log(Product.allProducts);
 
 //chatr
 
@@ -184,3 +197,5 @@ function chart() {
     });
     
   }
+
+  getProductsdata();
